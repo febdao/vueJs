@@ -37,8 +37,7 @@ html {
 
 body {
   -webkit-font-smoothing: antialiased;
-  padding: 60px 0;
-  background: pink; }
+  padding: 60px 0; }
 
 * {
   box-sizing: border-box; }

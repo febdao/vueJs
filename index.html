@@ -7,30 +7,23 @@
 </head>
 <body>
   <div class="container" id="app">
-    <h1>{{ message }}</h1>
-    <ul class="list-group">
-      <li class="list-group-item" v-for='name in names'>
-        {{ name.firstname }}
-        {{ name.lastname }}
-        <button v-on:click="removeItem($index)" class="badge" title="Remove this item">X</button>
-      </li>
-    </ul>
-    <form class="form-inline">
-      <div class="form-group">
-        <label for="inputFirstname" class="sr-only">First name</label>
-        <input type="text" v-model="newFirstname" class="form-control" name="inputFirstname" placeholder="First name">
+    <div class="filter">
+      <input type="text" placeholder="Search title" class="form-control" v-model="liveFilter">
+      <h4>Filter by genre:</h4>
+      <div class="row">
+        <div class="col-md-6">
+          <select name="" id="" class="form-control" v-model="genreFilter">
+            <option value="">All</option>
+            <option v-for='genre in genres' value="{{ genre }}">{{ genre | capitalize }}</option>
+          </select>
+        </div>
       </div>
-      <div class="form-group">
-        <label class="sr-only" for="inputLastname">Last name</label>
-        <input type="text" v-model="newLastname" class="form-control" name="inputLastname" placeholder="Last name">
-      </div>
-      <button type="button" name="button" class="btn btn-primary" v-on:click="addList">Add item</button>
-    </form>
+    </div>
     <br>
     <br>
     <br>
     <ul class="media-list movie">
-      <li class="media movie__item" v-for="movie in movies | filterBy ''">
+      <li class="media movie__item" v-for="movie in movies | filterBy liveFilter in 'title' | filterBy genreFilter in 'field_genres'">
         <div class="media-left movie__image">
           <img v-bind:src="movie.field_movie_poster[0].url" v-bind:alt="movie.field_movie_poster[0].alt" class="media-object">
         </div>
@@ -41,6 +34,9 @@
             <br>
             <strong>Actors:</strong>
             <span v-for="actor in movie.field_actor"> {{ actor.value }},</span>
+            <br>
+            <strong>Genre:</strong>
+            <span v-for="genre in movie.field_genres"> {{ genre.value }},</span>
           </div>
           <div class="movie__description">
             {{ movie.body[0].value }}
@@ -52,6 +48,10 @@
 
   <script src="js/vue.js" type="text/javascript" charset="utf-8"></script>
   <script src="js/vue-resource.js" type="text/javascript" charset="utf-8"></script>
+  <script
+  src="https://code.jquery.com/jquery-1.12.4.min.js"
+  integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ="
+  crossorigin="anonymous"></script>
   <script src="js/app.js" type="text/javascript" charset="utf-8"></script>
 </body>
 </html>
