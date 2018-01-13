@@ -26,9 +26,32 @@
       </div>
       <button type="button" name="button" class="btn btn-primary" v-on:click="addList">Add item</button>
     </form>
+    <br>
+    <br>
+    <br>
+    <ul class="media-list movie">
+      <li class="media movie__item" v-for="movie in movies | filterBy ''">
+        <div class="media-left movie__image">
+          <img v-bind:src="movie.field_movie_poster[0].url" v-bind:alt="movie.field_movie_poster[0].alt" class="media-object">
+        </div>
+        <div class="media-body movie__content">
+          <h4 class="movie__title">{{ movie.title[0].value }}</h4>
+          <div class="movie__meta">
+            <strong>Director:</strong> {{ movie.field_director[0].value }}
+            <br>
+            <strong>Actors:</strong>
+            <span v-for="actor in movie.field_actor"> {{ actor.value }},</span>
+          </div>
+          <div class="movie__description">
+            {{ movie.body[0].value }}
+          </div>
+        </div>
+      </li>
+    </ul>
   </div>
 
   <script src="js/vue.js" type="text/javascript" charset="utf-8"></script>
+  <script src="js/vue-resource.js" type="text/javascript" charset="utf-8"></script>
   <script src="js/app.js" type="text/javascript" charset="utf-8"></script>
 </body>
 </html>

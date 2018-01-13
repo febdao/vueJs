@@ -82,6 +82,12 @@ body {
 .clr {
   clear: both; }
 
+/* Component */
+.movie__image img {
+  width: 250px;
+  height: auto; }
+
+/* Pages */
 .loading-transition {
   transition: all .3s ease;
   padding: 20px;

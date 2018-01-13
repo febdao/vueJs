@@ -1,3 +1,5 @@
+apiURL = "http://daodinhhien.local/api/movies"
+
 new Vue({
   el: '#app',
 
@@ -7,8 +9,14 @@ new Vue({
       {firstname: 'Feb', lastname: 'Dao'},
       {firstname: 'Luna', lastname: 'Nguyen'},
       {firstname: 'Phoebe', lastname: 'Dao'}
-    ]
+    ],
+    movies: '',
   },
+
+  ready: function() {
+    this.getMovies();
+  },
+
   methods: {
     addList: function() {
       var firstName = this.newFirstname
@@ -24,6 +32,12 @@ new Vue({
     },
     removeItem: function(index) {
       this.names.splice(index, 1)
+    },
+    getMovies: function() {
+      this.$http.get(apiURL, function(movies) {
+        this.$set('movies', movies);
+        console.log(movies);
+      })
     }
   }
 })
