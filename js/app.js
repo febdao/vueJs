@@ -1,21 +1,29 @@
 apiURL = "http://daodinhhien.local/api/movies"
 
-new Vue({
-  el: '#app',
+// Make a new component
 
-  data: {
-    movies: '',
-    liveFilter: '',
-    genreFilter: '',
-    genres: ''
+var App = Vue.extend({});
+
+var movieList = Vue.extend({
+  template: '#movie-list-template',
+
+  data: function() {
+    return {
+      movies: '',
+      liveFilter: '',
+      genreFilter: '',
+      genres: '',
+      movie: ''
+    }
   },
 
   ready: function() {
-    this.getMovies();
+    this.getMovies()
   },
 
   methods: {
     getMovies: function() {
+      this.$set('movie', '');
       this.$http.get(apiURL, function(movies) {
         this.$set('movies', movies);
 
@@ -30,6 +38,43 @@ new Vue({
         });
         this.$set('genres',genresArr);
       });
-    }
+    },
   }
 });
+
+var singleMovie = Vue.extend({
+  template: '#single-movie-template',
+
+  data: function() {
+    return {
+      movie: ''
+    }
+  },
+
+  ready: function() {
+    this.getTheMovie();
+  },
+
+  methods: {
+    getTheMovie: function() {
+      this.$http.get(apiURL + '/' + this.$route.params.movieID , function(movie) {
+        this.$set('movie', movie);
+        console.log(JSON.stringify(movie));
+      })
+    }
+  }
+})
+
+var router = new VueRouter();
+
+router.map({
+  '/': {
+    component: movieList
+  },
+  '/movie/:movieID': {
+    name: 'movie',
+    component: singleMovie
+  }
+});
+
+router.start(App, '#app');

@@ -7,44 +7,64 @@
 </head>
 <body>
   <div class="container" id="app">
-    <div class="filter">
-      <input type="text" placeholder="Search title" class="form-control" v-model="liveFilter">
-      <h4>Filter by genre:</h4>
-      <div class="row">
-        <div class="col-md-6">
-          <select name="" id="" class="form-control" v-model="genreFilter">
-            <option value="">All</option>
-            <option v-for='genre in genres' value="{{ genre }}">{{ genre | capitalize }}</option>
-          </select>
+    <a v-link="{path: '/'}">Home</a>
+    <router-view></router-view>
+  </div>
+
+  <template id="movie-list-template">
+    <div class="video-list" v-show="!movie">
+      <div class="filter">
+        <input type="text" placeholder="Search title" class="form-control" v-model="liveFilter">
+        <h4>Filter by genre:</h4>
+        <div class="row">
+          <div class="col-md-6">
+            <select name="" id="" class="form-control" v-model="genreFilter">
+              <option value="">All</option>
+              <option v-for='genre in genres' value="{{ genre }}">{{ genre | capitalize }}</option>
+            </select>
+          </div>
         </div>
       </div>
-    </div>
-    <br>
-    <br>
-    <br>
-    <ul class="media-list movie">
-      <li class="media movie__item" v-for="movie in movies | filterBy liveFilter in 'title' | filterBy genreFilter in 'field_genres'">
-        <div class="media-left movie__image">
-          <img v-bind:src="movie.field_movie_poster[0].url" v-bind:alt="movie.field_movie_poster[0].alt" class="media-object">
-        </div>
-        <div class="media-body movie__content">
-          <h4 class="movie__title">{{ movie.title[0].value }}</h4>
-          <div class="movie__meta">
-            <strong>Director:</strong> {{ movie.field_director[0].value }}
-            <br>
-            <strong>Actors:</strong>
-            <span v-for="actor in movie.field_actor"> {{ actor.value }},</span>
-            <br>
+      <br>
+      <br>
+      <br>
+      <ul class="media-list movie">
+        <li class="media movie__item" v-for="movie in movies | filterBy liveFilter in 'title' | filterBy genreFilter in 'field_genres'">
+          <div class="media-left movie__image">
+            <img v-bind:src="movie.field_movie_poster[0].url" v-bind:alt="movie.field_movie_poster[0].alt" class="media-object">
+          </div>
+          <div class="media-body movie__content">
+            <h4 class="movie__title">
+              <a v-link="{ name: 'movie', params: {movieID: movie.nid[0].value }}">{{ movie.title[0].value }}</a>
+            </h4>
+            <div class="movie__meta">
+              <strong>Director:</strong> {{ movie.field_director[0].value }}
+              <br>
+              <strong>Actors:</strong>
+              <span v-for="actor in movie.field_actor"> {{ actor.value }},</span>
+            </div>
+            <hr>
             <strong>Genre:</strong>
             <span v-for="genre in movie.field_genres"> {{ genre.value }},</span>
           </div>
-          <div class="movie__description">
-            {{ movie.body[0].value }}
-          </div>
+        </li>
+      </ul>
+    </div>
+  </template>
+
+  <template id="single-movie-template">
+    <div class="single-movie" v-show="movie">
+      <div class="movie-item" v-for="movieItem in movie">
+        <h2>{{ movieItem.title[0].value }}</h2>
+        <div class="single-movie__img text-center">
+          <img v-bind:src="movieItem.field_movie_poster[0].url" v-bind:alt="movieItem.field_movie_poster[0].alt">
         </div>
-      </li>
-    </ul>
-  </div>
+        <div class="single-movie__description">
+          {{{ movieItem.body[0].value }}}
+        </div>
+      </div>
+    </div>
+  </template>
 
   <script src="js/vue.js" type="text/javascript" charset="utf-8"></script>
   <script src="js/vue-resource.js" type="text/javascript" charset="utf-8"></script>
@@ -52,6 +72,7 @@
   src="https://code.jquery.com/jquery-1.12.4.min.js"
   integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ="
   crossorigin="anonymous"></script>
+  <script src="js/vue-router.js" type="text/javascript" charset="utf-8"></script>
   <script src="js/app.js" type="text/javascript" charset="utf-8"></script>
 </body>
 </html>
